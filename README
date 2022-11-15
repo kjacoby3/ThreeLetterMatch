@@ -1,0 +1,74 @@
+# README: Three Letter Match Game
+
+Three Letter Match is a game where the player tries to list as many words as
+possible that contain a specified 3-letter pattern.
+
+## Usage
+
+Run the server first using the `./tcp_server` command.
+The run the client using the `./tcp_client` command.
+The game will open with a welcome message where you can use the `manual` command
+to read the instructions.
+
+## Design Choices
+
+### Multiple Clients
+
+Each connected client will play an entirely separate game. Scores will be stored separately.
+
+If I had more time, I would have added a `join` command that would allow a client to join another client's game. When a game would start, it would give the client a code that another client would input with the join command to join their game. This would be tough because I would have to create segments of shared memory so that different forked processes could have access to stored variables like the substring and the score. But it seems like a fun challenge I'd like to tackle.
+
+### Actions after list command
+
+The game will end following the `list` command. This is to prevent the user from continuously submitting words they see in the terminal to get the maximum score. The set substring will simply be reset and the player's score will return to 0.
+
+### Storing client score
+
+The client's score is stored temporarily with each game that is played. If there was more time, I would have liked to create a database leaderboard where you could submit your initials and score at the end of each game and the would be saved to a text file. I would've also added a `leaderboard` command that would list out all of the top scores on the leaderboard. This is another challenge that I think would be fun to tackle in the future.
+
+## RULES
+
+Before the player can start obtaining score, they must first use the `set` command to
+set the substring.
+The entered substring must be 3 characters long and must contain only alphabet letters.
+All other values will be rejected and will require the player to try again.
+
+Once the substring is set, the player may use the `submit` command to input words.
+If the submitted word contains the set substring, the player's score will increase by 1.
+
+Note: A word can only be used once. If a word is submitted more than once, the word will be rejected without penalty.
+
+If the submitted word does not contain the set substring or the word does not exist in the dictionary, the player will be penalized 1 point.
+
+The player can end the game by using either the `quit` or `list` commands. The `quit` command will simply end the game and give the player their final score. The `list` command will show the player all of the possible words containing the set substring and will give the player their final score.
+
+The `scoreboard` command can be used to list all of the words that have been correctly guessed so far, as well as the current score and the set substring.
+
+## Functions
+
+### void strsplit(char s1[], char s2[], int n)
+This strsplit function was written to separate command arguments from the command keyword.
+
+The function simply takes a string of s2 and copies the remaining string at index n and on into the string s1.
+
+### int set_list(char list[][32], char match[])
+This function was written to set the array of strings that contain the substring so that submitted words can be easily checked for.
+
+The function simple takes an array of strings input and match input. A loop reads each individual line in the "words.txt" file and then checks each line to see if it contains the given string (match). If the current line contains match, then the line is added into the list array.
+
+The function returns the total length of the list array.
+
+### int check_list(char list[][32], char word[], int length)
+This function was written to check if a submitted word contains the set substring and exists in the dictionary.
+
+The list input should contain the total list of words that includes the set substring and exists in the dictionary. A loop reads each entry in the list and compares it to the input word. If the current list entry is a direct match of the given word, then a 1 is returned. The list entry will also be placed back into the list with a "1" in front of the string to mark that it was used. If the current list entry is a direct match, but it has a "1" in front of it, a 0 is returned. If the given word does not find any match in the list, a -1 is returned.
+
+### void print_instructions()
+This function was written to print out a text file to the player.
+
+When this function is called, it simply opens the instructions.txt file and prints out every character as it is retrieved in a loop.
+
+## Author
+
+This program was written by Koen Jacoby for York College of Pennsylvania.
+The base server code was written by Dr. Galin Zhelezov

@@ -1,0 +1,16 @@
+How To Play
+====================================
+Commands:
+    Set - Sets a 3-letter substring to match words to. Ex: "set abc"
+    Submit - Submits a word to compare to the substring. Ex: "submit hello"
+    List - Lists all the words in the dictionary that match your substring. A "1" is used to mark the words you guessed correctly.
+    Quit - Stop playing the game and display your final score
+    Scoreboard - Lists all of the words you already correctly guessed.
+====================================
+To start playing, you should use the set command to set a 3-letter substring. Once
+your substring is set, submit words that contain the substring to score points. A
+point is earned for each unique word that you submit that matches the substring and
+that is in the dictionary. A point is lost for each word submitted that does not
+contain the substring or does not exist in the dictionary. The list command can be
+used to reference the library to see all words that contain your substring, doing
+this will end your game, however.
